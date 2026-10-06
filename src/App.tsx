@@ -1,56 +1,59 @@
-import { supabase } from './lib/supabase'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { LoginPage } from './pages/LoginPage'
+import { FramerPage } from './pages/FramerPage'
+import { AdminPage } from './pages/AdminPage'
 
-function App() {
+function HomeRedirect() {
   const { session, profile, loading } = useAuth()
 
+  if (loading) return <p>Loading...</p>
+
+  if (!session || !profile) {
+    return <Navigate to="/login" replace />
+  }
+
   return (
-    <div style={{ padding: '2rem' }}>
-      <p>Loading: {String(loading)}</p>
-      <p>Session: {session ? session.user.email : 'none'}</p>
-      <p>Profile: {profile ? JSON.stringify(profile) : 'none'}</p>
+    <Navigate
+      to={profile.role === 'admin' ? '/admin' : '/framer'}
+      replace
+    />
+  )
+}
 
-      <button
-        onClick={() =>
-          supabase.auth.signInWithPassword({
-            email: 'framer@ras-test.com',
-            password: 'framer123',
-          })
-        }
-      >
-        Sign in as Framer
-      </button>
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomeRedirect />} />
 
-      <button
-        onClick={() =>
-          supabase.auth.signInWithPassword({
-            email: 'admin@ras-test.com',
-            password: 'admin123',
-          })
-        }
-      >
-        Sign in as Admin
-      </button>
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
 
-      <button
-        onClick={() => supabase.auth.signOut()}
-      >
-        Sign out
-      </button>
+        <Route
+          path="/framer"
+          element={
+            <ProtectedRoute allowedRole="framer">
+              <FramerPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <button
-        onClick={async () => {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
 
-          console.log('profiles:', data)
-          console.log('error:', error)
-        }}
-      >
-        Test profiles read
-      </button>
-    </div>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
