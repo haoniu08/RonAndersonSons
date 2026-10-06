@@ -1,0 +1,251 @@
+/* ==========================================================
+   Layout containers
+   ========================================================== */
+
+.page-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* ==========================================================
+   Typography
+   ========================================================== */
+
+.page-container h1 {
+  font-size: 1.375rem;
+  margin: 0 0 1rem;
+}
+
+.page-container h2 {
+  font-size: 1.125rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+/* ==========================================================
+   Form fields
+   ========================================================== */
+
+.field-group {
+  margin-bottom: 1.25rem;
+}
+
+.field-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.field-input,
+.field-select,
+.field-textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.field-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.field-input:disabled,
+.field-select:disabled,
+.field-textarea:disabled {
+  background: #f3f3f3;
+  color: #666;
+}
+
+/* ==========================================================
+   Checklist
+   ========================================================== */
+
+.checklist-item {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.checklist-item input[type='checkbox'] {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* ==========================================================
+   Buttons
+   ========================================================== */
+
+.btn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+.btn-danger {
+  background: #fff;
+  color: #b00020;
+  border-color: #b00020;
+}
+
+/* ==========================================================
+   Messages
+   ========================================================== */
+
+.error-text {
+  color: #b00020;
+  font-size: 0.9rem;
+}
+
+.error-list {
+  color: #b00020;
+  font-size: 0.9rem;
+  padding-left: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.readonly-banner {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.helper-text {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.4rem 0 0;
+}
+
+/* ==========================================================
+   Photos
+   ========================================================== */
+
+.photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.photo-thumb {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+}
+
+.photo-thumb img,
+.photo-thumb .photo-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.photo-placeholder {
+  background: #eee;
+}
+
+.photo-remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   Submission list
+   ========================================================== */
+
+.submission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.submission-card {
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.85rem;
+  margin-bottom: 0.6rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.submission-card .site-name {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.submission-card .meta-row {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ==========================================================
+   Desktop refinements
+   ========================================================== */
+
+@media (min-width: 600px) {
+  .page-container {
+    padding: 2rem;
+    margin: 2rem auto;
+    border: 1px solid #eee;
+    border-radius: 12px;
+  }
+
+  .btn-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: auto;
+  }
+}

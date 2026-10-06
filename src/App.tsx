@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { LoginPage } from './pages/LoginPage'
 import { FramerPage } from './pages/FramerPage'
 import { AdminPage } from './pages/AdminPage'
+import { SubmissionFormPage } from './pages/SubmissionFormPage'
 
 function HomeRedirect() {
   const { session, profile, loading } = useAuth()
@@ -38,6 +39,15 @@ function App() {
           element={
             <ProtectedRoute allowedRole="framer">
               <FramerPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/framer/submissions/:id"
+          element={
+            <ProtectedRoute allowedRole="framer">
+              <SubmissionFormPage />
             </ProtectedRoute>
           }
         />

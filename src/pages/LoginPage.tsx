@@ -29,7 +29,11 @@ export function LoginPage() {
   }
 
   if (loading) {
-    return <p>Loading...</p>
+    return (
+      <div className="page-container">
+        <p>Loading...</p>
+      </div>
+    )
   }
 
   if (session && profile) {
@@ -42,15 +46,16 @@ export function LoginPage() {
   }
 
   return (
-    <div style={{ maxWidth: 360, margin: '4rem auto' }}>
+    <div className="page-container">
       <h1>Log in</h1>
 
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="field-group">
           <label htmlFor="email">Email</label>
           <input
             id="email"
             type="email"
+            className="field-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
@@ -58,11 +63,12 @@ export function LoginPage() {
           />
         </div>
 
-        <div>
+        <div className="field-group">
           <label htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
+            className="field-input"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
@@ -70,11 +76,17 @@ export function LoginPage() {
           />
         </div>
 
-        {error && <p>{error}</p>}
+        {error && (
+          <p className="error-text" role="alert" aria-live="polite">
+            {error}
+          </p>
+        )}
 
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Logging in...' : 'Log in'}
-        </button>
+        <div className="btn-row">
+          <button type="submit" className="btn btn-primary" disabled={submitting}>
+            {submitting ? 'Logging in...' : 'Log in'}
+          </button>
+        </div>
       </form>
     </div>
   )
