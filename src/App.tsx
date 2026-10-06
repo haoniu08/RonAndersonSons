@@ -5,6 +5,7 @@ import { LoginPage } from './pages/LoginPage'
 import { FramerPage } from './pages/FramerPage'
 import { AdminPage } from './pages/AdminPage'
 import { SubmissionFormPage } from './pages/SubmissionFormPage'
+import { AdminSubmissionDetailPage } from './pages/AdminSubmissionDetailPage'
 
 function HomeRedirect() {
   const { session, profile, loading } = useAuth()
@@ -57,6 +58,15 @@ function App() {
           element={
             <ProtectedRoute allowedRole="admin">
               <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/submissions/:id"
+          element={
+            <ProtectedRoute allowedRole="admin">
+              <AdminSubmissionDetailPage />
             </ProtectedRoute>
           }
         />

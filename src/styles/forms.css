@@ -249,3 +249,48 @@
     width: auto;
   }
 }
+
+/* ==========================================================
+   Summary cards
+   ========================================================== */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  margin: 0.75rem 0 1.5rem;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+  background: #fff;
+}
+
+.submission-card {
+  overflow-wrap: anywhere;
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 0.2rem;
+}
+
+@media (min-width: 600px) {
+  .summary-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
