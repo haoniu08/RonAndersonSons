@@ -4,8 +4,21 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
+import { useEffect } from 'react'    // smoke test 
+import { supabase } from './lib/supabase'    // smoke test 
+
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {    // smoke test 
+    supabase
+      .from('some_table')
+      .select('*')
+      .then(({ data, error }) => {
+        console.log('data:', data)
+        console.log('error:', error)
+      })
+  }, [])
 
   return (
     <>
@@ -16,7 +29,7 @@ function App() {
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
-          <h1>Get started</h1>
+          <h1>Testtest</h1>
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>

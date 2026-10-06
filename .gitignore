@@ -24,4 +24,5 @@ dist-ssr
 *.sw?
 
 .env
-requirements.md .env
+requirements.md 
+
