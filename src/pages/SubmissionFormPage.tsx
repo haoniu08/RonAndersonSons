@@ -2,6 +2,8 @@ import { useEffect, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
+import { Header } from '../components/Header'
+
 
 interface Site {
   id: string
@@ -559,7 +561,11 @@ export function SubmissionFormPage() {
       return
     }
 
-    navigate('/framer')
+    navigate('/framer', {
+      state: {
+        successMessage: 'Safety form submitted successfully.',
+      },
+    })
   }
 
   async function handleDelete() {
@@ -614,261 +620,266 @@ export function SubmissionFormPage() {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <p>Loading...</p>
-      </div>
+      <>
+        <Header />
+        <div className="page-container">
+          <p>Loading...</p>
+        </div>
+      </>
     )
   }
 
   return (
-    <div className="page-container">
-      <h1>
-        {isNew
-          ? 'New safety form'
-          : isReadOnly
-            ? 'Submission'
-            : 'Edit draft'}
-      </h1>
+    <>
+      <Header />
+      <div className="page-container">
+        <h1>
+          {isNew
+            ? 'New safety form'
+            : isReadOnly
+              ? 'Submission'
+              : 'Edit draft'}
+        </h1>
 
-      {isReadOnly && (
-        <p className="readonly-banner">
-          This submission is {status} and can no longer be edited.
-        </p>
-      )}
-
-      {error && (
-        <p className="error-text">
-          {error}
-        </p>
-      )}
-
-      {fieldErrors.length > 0 && (
-        <ul className="error-list">
-          {fieldErrors.map((message) => (
-            <li key={message}>
-              {message}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div className="field-group">
-        <label htmlFor="site">
-          Site
-        </label>
-
-        <select
-          id="site"
-          className="field-select"
-          value={siteId}
-          onChange={(event) =>
-            setSiteId(event.target.value)
-          }
-          disabled={isReadOnly || busy}
-        >
-          <option value="">
-            Select a site
-          </option>
-
-          {sites.map((site) => (
-            <option
-              key={site.id}
-              value={site.id}
-            >
-              {site.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="field-group">
-        <label htmlFor="date">
-          Date
-        </label>
-
-        <input
-          id="date"
-          type="date"
-          className="field-input"
-          value={submissionDate}
-          onChange={(event) =>
-            setSubmissionDate(event.target.value)
-          }
-          disabled={isReadOnly || busy}
-        />
-      </div>
-
-      <div className="field-group">
-        <h2>Checklist</h2>
-
-        {(Object.keys(checklistLabels) as Array<
-          keyof ChecklistState
-        >).map((key) => (
-          <label
-            key={key}
-            className="checklist-item"
-          >
-            <input
-              type="checkbox"
-              checked={checklist[key]}
-              disabled={isReadOnly || busy}
-              onChange={(event) =>
-                setChecklist((previous) => ({
-                  ...previous,
-                  [key]: event.target.checked,
-                }))
-              }
-            />
-
-            <span>
-              {checklistLabels[key]}
-            </span>
-          </label>
-        ))}
-      </div>
-
-      <div className="field-group">
-        <label htmlFor="notes">
-          Notes
-        </label>
-
-        <textarea
-          id="notes"
-          className="field-textarea"
-          value={notes}
-          onChange={(event) =>
-            setNotes(event.target.value)
-          }
-          disabled={isReadOnly || busy}
-        />
-      </div>
-
-      <div className="field-group">
-        <h2>Photos</h2>
-
-        {!isReadOnly && (
-          <>
-            <input
-              type="file"
-              className="field-input"
-              accept="image/jpeg,image/png,image/webp"
-              multiple
-              onChange={handlePhotoSelect}
-              disabled={busy}
-            />
-
-            <p className="helper-text">
-              JPEG, PNG, or WebP. Maximum 5 MB per photo.
-            </p>
-          </>
-        )}
-
-        {uploading && (
-          <p>
-            Uploading...
+        {isReadOnly && (
+          <p className="readonly-banner">
+            This submission is {status} and can no longer be edited.
           </p>
         )}
 
-        {photoErrors.length > 0 && (
+        {error && (
+          <p className="error-text">
+            {error}
+          </p>
+        )}
+
+        {fieldErrors.length > 0 && (
           <ul className="error-list">
-            {photoErrors.map(
-              (message, index) => (
-                <li
-                  key={`${message}-${index}`}
-                >
-                  {message}
-                </li>
-              ),
-            )}
+            {fieldErrors.map((message) => (
+              <li key={message}>
+                {message}
+              </li>
+            ))}
           </ul>
         )}
 
-        {photos.length === 0 && (
-          <p>
-            No photos attached.
-          </p>
-        )}
+        <div className="field-group">
+          <label htmlFor="site">
+            Site
+          </label>
 
-        <div className="photo-grid">
-          {photos.map((photo) => (
-            <div
-              key={photo.id}
-              className="photo-thumb"
+          <select
+            id="site"
+            className="field-select"
+            value={siteId}
+            onChange={(event) =>
+              setSiteId(event.target.value)
+            }
+            disabled={isReadOnly || busy}
+          >
+            <option value="">
+              Select a site
+            </option>
+
+            {sites.map((site) => (
+              <option
+                key={site.id}
+                value={site.id}
+              >
+                {site.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="field-group">
+          <label htmlFor="date">
+            Date
+          </label>
+
+          <input
+            id="date"
+            type="date"
+            className="field-input"
+            value={submissionDate}
+            onChange={(event) =>
+              setSubmissionDate(event.target.value)
+            }
+            disabled={isReadOnly || busy}
+          />
+        </div>
+
+        <div className="field-group">
+          <h2>Checklist</h2>
+
+          {(Object.keys(checklistLabels) as Array<
+            keyof ChecklistState
+          >).map((key) => (
+            <label
+              key={key}
+              className="checklist-item"
             >
+              <input
+                type="checkbox"
+                checked={checklist[key]}
+                disabled={isReadOnly || busy}
+                onChange={(event) =>
+                  setChecklist((previous) => ({
+                    ...previous,
+                    [key]: event.target.checked,
+                  }))
+                }
+              />
+
+              <span>
+                {checklistLabels[key]}
+              </span>
+            </label>
+          ))}
+        </div>
+
+        <div className="field-group">
+          <label htmlFor="notes">
+            Notes
+          </label>
+
+          <textarea
+            id="notes"
+            className="field-textarea"
+            value={notes}
+            onChange={(event) =>
+              setNotes(event.target.value)
+            }
+            disabled={isReadOnly || busy}
+          />
+        </div>
+
+        <div className="field-group">
+          <h2>Photos</h2>
+
+          {!isReadOnly && (
+            <>
+              <input
+                type="file"
+                className="field-input"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                onChange={handlePhotoSelect}
+                disabled={busy}
+              />
+
+              <p className="helper-text">
+                JPEG, PNG, or WebP. Maximum 5 MB per photo.
+              </p>
+            </>
+          )}
+
+          {uploading && (
+            <p>
+              Uploading...
+            </p>
+          )}
+
+          {photoErrors.length > 0 && (
+            <ul className="error-list">
+              {photoErrors.map(
+                (message, index) => (
+                  <li
+                    key={`${message}-${index}`}
+                  >
+                    {message}
+                  </li>
+                ),
+              )}
+            </ul>
+          )}
+
+          {photos.length === 0 && (
+            <p>
+              No photos attached.
+            </p>
+          )}
+
+          <div className="photo-grid">
+            {photos.map((photo) => (
+              <div
+                key={photo.id}
+                className="photo-thumb"
+              >
               {photo.url ? (
-                <img
-                  src={photo.url}
-                  alt={photo.file_name}
-                />
+                <a href={photo.url} target="_blank" rel="noopener noreferrer">
+                  <img src={photo.url} alt={photo.file_name} />
+                </a>
               ) : (
                 <div className="photo-placeholder" />
               )}
 
-              {!isReadOnly && (
-                <button
-                  type="button"
-                  className="photo-remove-btn"
-                  aria-label={`Remove ${photo.file_name}`}
-                  onClick={() =>
-                    handleRemovePhoto(photo)
-                  }
-                  disabled={busy}
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          ))}
+                {!isReadOnly && (
+                  <button
+                    type="button"
+                    className="photo-remove-btn"
+                    aria-label={`Remove ${photo.file_name}`}
+                    onClick={() =>
+                      handleRemovePhoto(photo)
+                    }
+                    disabled={busy}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {!isReadOnly && (
+        {!isReadOnly && (
+          <div className="btn-row">
+            <button
+              type="button"
+              className="btn"
+              onClick={saveDraft}
+              disabled={busy}
+            >
+              {saving
+                ? 'Saving...'
+                : 'Save draft'}
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleSubmitForm}
+              disabled={busy}
+            >
+              {saving
+                ? 'Submitting...'
+                : 'Submit'}
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={handleDelete}
+              disabled={busy}
+            >
+              Delete draft
+            </button>
+          </div>
+        )}
+
         <div className="btn-row">
           <button
             type="button"
             className="btn"
-            onClick={saveDraft}
+            onClick={() =>
+              navigate('/framer')
+            }
             disabled={busy}
           >
-            {saving
-              ? 'Saving...'
-              : 'Save draft'}
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={handleSubmitForm}
-            disabled={busy}
-          >
-            {saving
-              ? 'Submitting...'
-              : 'Submit'}
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={handleDelete}
-            disabled={busy}
-          >
-            Delete draft
+            Back
           </button>
         </div>
-      )}
-
-      <div className="btn-row">
-        <button
-          type="button"
-          className="btn"
-          onClick={() =>
-            navigate('/framer')
-          }
-          disabled={busy}
-        >
-          Back
-        </button>
       </div>
-    </div>
+    </>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { Header } from '../components/Header'
 
 type SubmissionStatus =
   | 'submitted'
@@ -195,16 +196,25 @@ export function AdminSubmissionDetailPage() {
     setActioning(true)
     setError(null)
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('submissions')
       .update({
         status: newStatus,
       })
       .eq('id', id)
       .eq('status', 'submitted')
+      .select('id')
 
     if (error) {
       setError(error.message)
+      setActioning(false)
+      return
+    }
+
+    if (!data || data.length === 0) {
+      setError(
+        'This submission has already been reviewed or changed by another session.',
+      )
       setActioning(false)
       return
     }
@@ -223,29 +233,37 @@ export function AdminSubmissionDetailPage() {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <p>Loading...</p>
-      </div>
+      <>
+        <Header />
+
+        <div className="page-container">
+          <p>Loading...</p>
+        </div>
+      </>
     )
   }
 
   if (!detail) {
     return (
-      <div className="page-container">
-        <p className="error-text">
-          {error ?? 'Submission not found.'}
-        </p>
+      <>
+        <Header />
 
-        <div className="btn-row">
-          <button
-            type="button"
-            className="btn"
-            onClick={() => navigate('/admin')}
-          >
-            Back
-          </button>
+        <div className="page-container">
+          <p className="error-text">
+            {error ?? 'Submission not found.'}
+          </p>
+
+          <div className="btn-row">
+            <button
+              type="button"
+              className="btn"
+              onClick={() => navigate('/admin')}
+            >
+              Back
+            </button>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -253,138 +271,148 @@ export function AdminSubmissionDetailPage() {
     detail.status === 'submitted'
 
   return (
-    <div className="page-container">
-      <h1>Submission detail</h1>
+    <>
+      <Header />
 
-      <p className="readonly-banner">
-        Status: {detail.status}
-      </p>
+      <div className="page-container">
+        <h1>Submission detail</h1>
 
-      <div className="field-group">
-        <strong>Worker:</strong>{' '}
-        {detail.worker_name}
-      </div>
-
-      <div className="field-group">
-        <strong>Site:</strong>{' '}
-        {detail.site_name}
-      </div>
-
-      <div className="field-group">
-        <strong>Date:</strong>{' '}
-        {detail.submission_date ?? 'No date'}
-      </div>
-
-      <div className="field-group">
-        <h2>Checklist</h2>
-
-        {(Object.keys(checklistLabels) as Array<
-          keyof ChecklistState
-        >).map((key) => (
-          <label
-            key={key}
-            className="checklist-item"
-          >
-            <input
-              type="checkbox"
-              checked={detail.checklist[key]}
-              disabled
-              readOnly
-            />
-
-            <span>
-              {checklistLabels[key]}
-            </span>
-          </label>
-        ))}
-      </div>
-
-      <div className="field-group">
-        <h2>Notes</h2>
-
-        <p>
-          {detail.notes || 'No notes provided.'}
+        <p className="readonly-banner">
+          Status: {detail.status}
         </p>
-      </div>
 
-      <div className="field-group">
-        <h2>Photos</h2>
+        <div className="field-group">
+          <strong>Worker:</strong>{' '}
+          {detail.worker_name}
+        </div>
 
-        {photos.length === 0 && (
-          <p>No photos attached.</p>
-        )}
+        <div className="field-group">
+          <strong>Site:</strong>{' '}
+          {detail.site_name}
+        </div>
 
-        <div className="photo-grid">
-          {photos.map((photo) => (
-            <div
-              key={photo.id}
-              className="photo-thumb"
+        <div className="field-group">
+          <strong>Date:</strong>{' '}
+          {detail.submission_date ?? 'No date'}
+        </div>
+
+        <div className="field-group">
+          <h2>Checklist</h2>
+
+          {(Object.keys(checklistLabels) as Array<
+            keyof ChecklistState
+          >).map((key) => (
+            <label
+              key={key}
+              className="checklist-item"
             >
-              {photo.url ? (
-                <img
-                  src={photo.url}
-                  alt={photo.file_name}
-                />
-              ) : (
-                <div className="photo-placeholder" />
-              )}
-            </div>
+              <input
+                type="checkbox"
+                checked={detail.checklist[key]}
+                disabled
+                readOnly
+              />
+
+              <span>
+                {checklistLabels[key]}
+              </span>
+            </label>
           ))}
         </div>
-      </div>
 
-      {error && (
-        <p
-          className="error-text"
-          role="alert"
-          aria-live="polite"
-        >
-          {error}
-        </p>
-      )}
+        <div className="field-group">
+          <h2>Notes</h2>
 
-      {canReview && (
+          <p>
+            {detail.notes || 'No notes provided.'}
+          </p>
+        </div>
+
+        <div className="field-group">
+          <h2>Photos</h2>
+
+          {photos.length === 0 && (
+            <p>No photos attached.</p>
+          )}
+
+          <div className="photo-grid">
+            {photos.map((photo) => (
+              <div
+                key={photo.id}
+                className="photo-thumb"
+              >
+                {photo.url ? (
+                  <a
+                    href={photo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={photo.url}
+                      alt={photo.file_name}
+                    />
+                  </a>
+                ) : (
+                  <div className="photo-placeholder" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {error && (
+          <p
+            className="error-text"
+            role="alert"
+            aria-live="polite"
+          >
+            {error}
+          </p>
+        )}
+
+        {canReview && (
+          <div className="btn-row">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() =>
+                handleReview('reviewed')
+              }
+              disabled={actioning}
+            >
+              {actioning
+                ? 'Saving...'
+                : 'Mark reviewed'}
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() =>
+                handleReview('rejected')
+              }
+              disabled={actioning}
+            >
+              {actioning
+                ? 'Saving...'
+                : 'Reject'}
+            </button>
+          </div>
+        )}
+
         <div className="btn-row">
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn"
             onClick={() =>
-              handleReview('reviewed')
+              navigate('/admin')
             }
             disabled={actioning}
           >
-            {actioning
-              ? 'Saving...'
-              : 'Mark reviewed'}
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() =>
-              handleReview('rejected')
-            }
-            disabled={actioning}
-          >
-            {actioning
-              ? 'Saving...'
-              : 'Reject'}
+            Back
           </button>
         </div>
-      )}
-
-      <div className="btn-row">
-        <button
-          type="button"
-          className="btn"
-          onClick={() =>
-            navigate('/admin')
-          }
-          disabled={actioning}
-        >
-          Back
-        </button>
       </div>
-    </div>
+    </>
   )
 }

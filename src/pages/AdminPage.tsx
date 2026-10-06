@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
+import { Header } from '../components/Header'
 
 type SubmissionStatus = 'submitted' | 'reviewed' | 'rejected'
 
@@ -171,8 +172,10 @@ export function AdminPage() {
   }
 
   return (
-    <div className="page-container">
-      <h1>Admin dashboard</h1>
+    <>
+      <Header />
+      <div className="page-container">
+        <h1>Admin dashboard</h1>
 
       <p>
         Logged in as {profile?.name}
@@ -393,36 +396,37 @@ export function AdminPage() {
           <p>No matching submissions.</p>
         )}
 
-      <ul className="submission-list">
-        {submissions.map((submission) => (
-          <li key={submission.id}>
-            <Link
-              to={`/admin/submissions/${submission.id}`}
-              className="submission-card"
-            >
-              <div className="site-name">
-                {submission.sites?.name ??
-                  'Unknown site'}
-              </div>
+        <ul className="submission-list">
+          {submissions.map((submission) => (
+            <li key={submission.id}>
+              <Link
+                to={`/admin/submissions/${submission.id}`}
+                className="submission-card"
+              >
+                <div className="site-name">
+                  {submission.sites?.name ??
+                    'Unknown site'}
+                </div>
 
-              <div className="meta-row">
-                Worker:{' '}
-                {submission.profiles?.name ??
-                  'Unknown worker'}
-              </div>
+                <div className="meta-row">
+                  Worker:{' '}
+                  {submission.profiles?.name ??
+                    'Unknown worker'}
+                </div>
 
-              <div className="meta-row">
-                {submission.submission_date ??
-                  'No date'}
-              </div>
+                <div className="meta-row">
+                  {submission.submission_date ??
+                    'No date'}
+                </div>
 
-              <div className="meta-row">
-                Status: {submission.status}
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+                <div className="meta-row">
+                  Status: {submission.status}
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   )
 }
