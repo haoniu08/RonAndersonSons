@@ -143,7 +143,35 @@ Drafts remain editable until submission. Once submitted, the form becomes read-o
 
 ---
 
-## 4. Architecture & Security
+## 4. Screenshots
+
+### Framer Dashboard
+
+<img src="./docs/screenshots/framer-dashboard.png" alt="Framer dashboard" width="280">
+
+### Safety Form
+
+<img src="./docs/screenshots/framer-form.png" alt="Safety form" width="280">
+
+### Admin Dashboard
+
+<img src="./docs/screenshots/admin-dashboard.png" alt="Admin dashboard" width="280">
+
+### Admin Submission Review
+
+<img src="./docs/screenshots/admin-submission.png" alt="Admin submission review" width="280">
+
+### Mobile Framer View
+
+<img src="./docs/screenshots/mobile-framer.png" alt="Mobile framer view" width="280">
+
+### Mobile Admin View
+
+<img src="./docs/screenshots/mobile-admin.png" alt="Mobile admin view" width="280">
+
+---
+
+## 5. Architecture & Security
 
 The React client communicates directly with Supabase.
 
@@ -212,7 +240,7 @@ Storage policies on `storage.objects` enforce ownership and draft-state rules in
 
 ---
 
-## 5. Database & ERD
+## 6. Database & ERD
 
 ![RAS Safety Portal ERD](./docs/ras-erd.png)
 
@@ -329,7 +357,7 @@ submission_photos
 
 ---
 
-## 6. Design Decisions & Edge Cases
+## 7. Design Decisions & Edge Cases
 
 ### Submission lifecycle
 
@@ -439,7 +467,7 @@ Instead, the dashboard implements the requirement's other suggested summary:
 
 ---
 
-## 7. Local Setup
+## 8. Local Setup
 
 ### Clone the repository
 
@@ -522,7 +550,7 @@ Vite will start the local development server.
 
 ---
 
-## 8. Assumptions, Demo Data & Tradeoffs
+## 9. Assumptions, Demo Data & Tradeoffs
 
 ### Demo data
 
@@ -559,7 +587,7 @@ These were deliberate scope choices for the assessment rather than required func
 
 ---
 
-## 9. Deployment & Testing
+## 10. Deployment & Testing
 
 ### Deployment
 
@@ -626,7 +654,7 @@ The responsive interface was tested at common phone widths, including approximat
 
 ---
 
-## 10. Repository Structure
+## 11. Repository Structure
 
 ```text
 RonAndersonSons/
@@ -647,7 +675,7 @@ RonAndersonSons/
 
 ---
 
-## 11. Submission Links
+## 12. Submission Links
 
 **Live application:**  
 https://ron-anderson-sons.vercel.app
